@@ -1,0 +1,100 @@
+/*31.Дано число m и целочисленный массив размера N. Поменять местами
+первую1|последнюю2 и m-ю серии массива. Если серий в массиве меньше m,
+то вывести массив без изменений.
+*/
+
+
+#include <stdlib.h>
+#include<iostream>
+using namespace std;
+
+   
+int find_f(int x, int* arr, int size) {
+    int i;
+    for (i = 0; i < size; ++i)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}
+int find_l(int x, int* arr, int size) {
+    int i;
+    for (i = size - 1; i >= 0; --i)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}
+
+int count_(int p, int* arr) {
+    int count = 0;
+    int* _p = arr + p;
+    while (*_p == *(arr + p)) {
+        ++count;
+        ++_p;
+    }
+    return count;
+}
+
+void shift_right(int e, int pos, int* arr, int size) {
+    int buff, i;
+    int pos_e = find_f(e, arr, size);
+    int count_e = count_(pos_e, arr);
+    pos += (count_(pos, arr) - 1);
+    for (i = 0; i < count_e; ++i) {
+        while (arr[pos - i] != e) {
+            buff = arr[pos_e];
+            arr[pos_e] = arr[pos_e + 1];
+            arr[pos_e + 1] = buff;
+            ++pos_e;
+        }
+        pos_e = find_f(e, arr, size);
+    }
+}
+void shift_left(int e, int pos, int* arr, int size) {
+    int buff, i;
+    int pos_e = find_f(e, arr, size);
+    int count_e = count_(pos_e, arr);
+    for (i = 0; i < count_e; ++i) {
+        pos_e = find_l(e, arr, size);
+        while (arr[pos + i] != e) {
+            buff = arr[pos_e];
+            arr[pos_e] = arr[pos_e - 1];
+            arr[pos_e - 1] = buff;
+            --pos_e;
+        }
+    }
+}
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    while (true)
+    {
+        int z;
+        cout << "\nВыберите действие: 1-Вычисление,0-Выход" << endl;
+        cin >> z;
+        cout << endl << endl;
+        if (z == 0)
+        {
+            break;
+        }
+        else
+        {
+
+            int arr[] = { 1, 1, 2, 3, 3, 4, 5, 5, 6, 6 };
+            int size = sizeof(arr) / sizeof(arr[0]);
+            int _i = 1, _j = 6, i;
+            int pos_j = find_f(_j, arr, size),
+                pos_i = find_f(_i, arr, size);
+            shift_left(_j, pos_i, arr, size);
+            shift_right(_i, pos_j, arr, size);
+
+
+
+
+            for (i = 0; i < size; ++i) {
+                cout << ("%d ", arr[i]) << endl;
+            }
+        }
+        return 0;
+    }
+}
